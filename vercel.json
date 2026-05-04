@@ -1,0 +1,5 @@
+{
+  "buildCommand": "cd kino-astro && npm install && npm run build",
+  "outputDirectory": "kino-astro/dist",
+  "installCommand": "echo 'install handled in buildCommand'"
+}
