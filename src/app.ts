@@ -7,9 +7,6 @@ import projectRoutes from './routes/projects';
 import { handleRender } from './routes/render';
 import { handleGetJob } from './routes/jobs';
 
-// Start the BullMQ worker when the app loads
-import './services/queue';
-
 const app = express();
 
 app.use(cors());
