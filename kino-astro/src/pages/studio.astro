@@ -1,0 +1,322 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Studio" description="Render an animation.">
+  <!-- Auth guard applied in client JS -->
+  <div id="studio-shell" style="display:none">
+    <section class="studio">
+      <div class="container">
+
+        <!-- Left: Prompt + controls -->
+        <div class="studio__left">
+          <h2 class="studio__heading">New render</h2>
+
+          <div class="prompt-block">
+            <textarea
+              class="prompt-block__input"
+              id="studio-prompt"
+              placeholder="Describe a motion…"
+              rows="4"
+            ></textarea>
+            <div class="prompt-block__footer">
+              <span class="prompt-block__hint">
+                logo · text · chart
+              </span>
+              <button class="btn btn--primary" id="studio-render-btn">Render →</button>
+            </div>
+          </div>
+
+          <div class="suggestions">
+            <button class="suggestion" data-prompt="animate 'KINO' rising up, white on black">Text stagger</button>
+            <button class="suggestion" data-prompt="logo reveal for 'KINO'">Logo reveal</button>
+            <button class="suggestion" data-prompt="bar chart 45 78 60 92 38">Chart build</button>
+          </div>
+        </div>
+
+        <!-- Right: Job status + video preview -->
+        <div class="studio__right">
+          <div id="idle-state" class="idle-state">
+            <p>No render yet. Submit a prompt to start.</p>
+          </div>
+
+          <div id="job-state" class="job-card" style="display:none">
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span class="status-dot" id="job-dot"></span>
+              <span id="job-status-text" style="font-size:0.875rem"></span>
+            </div>
+
+            <div class="progress-bar">
+              <div class="progress-bar__fill" id="job-progress" style="width:0%"></div>
+            </div>
+
+            <p id="job-template" style="font-size:0.75rem; color:var(--text-dim)"></p>
+          </div>
+
+          <div id="result-state" style="display:none; flex-direction:column; gap:16px;">
+            <video
+              id="result-video"
+              controls
+              loop
+              style="width:100%; border-radius:4px; border:1px solid var(--border); background:#000"
+            ></video>
+            <a
+              id="download-btn"
+              class="btn btn--ghost"
+              style="justify-content:center"
+              download
+            >
+              Export MP4
+            </a>
+          </div>
+
+          <div id="error-state" style="display:none; color:#ef4444; font-size:0.875rem"></div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Projects list -->
+    <section class="projects-section">
+      <div class="container">
+        <h3 class="projects-heading">Recent projects</h3>
+        <div id="projects-list" class="projects-grid"></div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Unauthenticated state -->
+  <div id="unauth-state" style="display:none; min-height:calc(100vh - 56px); display:none; align-items:center; justify-content:center; text-align:center; padding:40px 24px;">
+    <div>
+      <p style="color:var(--text-dim); margin-bottom:24px;">Sign in to use the studio.</p>
+      <a href="/login" class="btn btn--primary">Sign in</a>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .studio {
+    padding: 48px 0 32px;
+  }
+
+  .studio .container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: start;
+  }
+
+  @media (max-width: 768px) {
+    .studio .container { grid-template-columns: 1fr; }
+  }
+
+  .studio__heading {
+    font-size: 1.25rem;
+    margin-bottom: 20px;
+  }
+
+  .suggestions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 12px;
+  }
+
+  .suggestion {
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--text-dim);
+    font-family: var(--font);
+    font-size: 0.75rem;
+    padding: 6px 12px;
+    cursor: pointer;
+    transition: border-color 150ms, color 150ms;
+  }
+
+  .suggestion:hover { border-color: var(--muted); color: var(--text); }
+
+  .idle-state {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 200px;
+    border: 1px dashed var(--border);
+    border-radius: var(--radius);
+    color: var(--text-dim);
+    font-size: 0.875rem;
+    text-align: center;
+    padding: 24px;
+  }
+
+  .projects-section { padding: 0 0 80px; }
+
+  .projects-heading {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 16px;
+  }
+
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 12px;
+  }
+
+  .project-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .project-item__title { font-weight: 600; font-size: 0.9375rem; }
+  .project-item__prompt { font-size: 0.8125rem; color: var(--text-dim); line-height: 1.4; }
+  .project-item__date { font-size: 0.75rem; color: var(--muted); }
+</style>
+
+<script>
+  import { isLoggedIn, api } from '../lib/api';
+
+  // Auth guard
+  const shell  = document.getElementById('studio-shell')!;
+  const unauth = document.getElementById('unauth-state')!;
+
+  if (!isLoggedIn()) {
+    shell.style.display  = 'none';
+    unauth.style.display = 'flex';
+  } else {
+    shell.style.display = 'block';
+    loadProjects();
+  }
+
+  // Fill prompt from sessionStorage if redirected from homepage
+  const pending = sessionStorage.getItem('kino_pending_prompt');
+  if (pending) {
+    const input = document.getElementById('studio-prompt') as HTMLTextAreaElement;
+    if (input) input.value = pending;
+    sessionStorage.removeItem('kino_pending_prompt');
+  }
+
+  // Suggestion chips
+  document.querySelectorAll<HTMLButtonElement>('.suggestion').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const input = document.getElementById('studio-prompt') as HTMLTextAreaElement;
+      if (input) { input.value = btn.dataset.prompt ?? ''; input.focus(); }
+    });
+  });
+
+  // Render button
+  let pollTimer: ReturnType<typeof setInterval> | null = null;
+
+  document.getElementById('studio-render-btn')?.addEventListener('click', async () => {
+    const prompt = (document.getElementById('studio-prompt') as HTMLTextAreaElement)?.value.trim();
+    if (!prompt) return;
+    await startRender(prompt);
+  });
+
+  async function startRender(prompt: string) {
+    showState('job');
+    setJobUI('queued', 0, '');
+
+    try {
+      const { jobId, template } = await api.submitRender(prompt);
+      setJobUI('queued', 0, template);
+      pollJob(jobId, template);
+
+      // Save as project
+      try {
+        await api.createProject(prompt.slice(0, 60), prompt);
+        loadProjects();
+      } catch (_) { /* non-critical */ }
+    } catch (err) {
+      showState('error');
+      document.getElementById('error-state')!.textContent = (err as Error).message;
+    }
+  }
+
+  function pollJob(jobId: string, template: string) {
+    if (pollTimer) clearInterval(pollTimer);
+
+    pollTimer = setInterval(async () => {
+      try {
+        const job = await api.getJob(jobId);
+        setJobUI(job.status, job.progress, template);
+
+        if (job.status === 'done' && job.outputUrl) {
+          clearInterval(pollTimer!);
+          showResult(job.outputUrl);
+        } else if (job.status === 'failed') {
+          clearInterval(pollTimer!);
+          showState('error');
+          document.getElementById('error-state')!.textContent =
+            job.error ?? 'Render failed.';
+        }
+      } catch (_) { /* keep polling */ }
+    }, 1500);
+  }
+
+  function setJobUI(status: string, progress: number, template: string) {
+    const dot  = document.getElementById('job-dot')!;
+    const text = document.getElementById('job-status-text')!;
+    const bar  = document.getElementById('job-progress') as HTMLElement;
+    const tmpl = document.getElementById('job-template')!;
+
+    dot.className = `status-dot status-dot--${status}`;
+    text.textContent = status === 'queued'    ? 'Queued'
+                     : status === 'rendering' ? `Rendering — ${progress}%`
+                     : status === 'done'      ? 'Done'
+                     : 'Failed';
+    bar.style.width = `${progress}%`;
+    if (template) tmpl.textContent = `Template: ${template.replace('-', ' ')}`;
+  }
+
+  function showResult(outputUrl: string) {
+    const backendBase = (import.meta as any).env?.PUBLIC_API_URL ?? 'http://localhost:5000';
+    const fullUrl = outputUrl.startsWith('http') ? outputUrl : `${backendBase}${outputUrl}`;
+
+    const video  = document.getElementById('result-video') as HTMLVideoElement;
+    const dl     = document.getElementById('download-btn') as HTMLAnchorElement;
+
+    video.src = fullUrl;
+    dl.href   = fullUrl;
+    showState('result');
+  }
+
+  function showState(state: 'idle' | 'job' | 'result' | 'error') {
+    document.getElementById('idle-state')!.style.display   = state === 'idle'   ? 'flex'   : 'none';
+    document.getElementById('job-state')!.style.display    = state === 'job'    ? 'flex'   : 'none';
+    document.getElementById('result-state')!.style.display = state === 'result' ? 'flex'   : 'none';
+    document.getElementById('error-state')!.style.display  = state === 'error'  ? 'block'  : 'none';
+  }
+
+  async function loadProjects() {
+    try {
+      const projects = await api.listProjects();
+      const grid = document.getElementById('projects-list')!;
+
+      if (!projects.length) {
+        grid.innerHTML = '<p style="color:var(--text-dim);font-size:0.875rem">No projects yet.</p>';
+        return;
+      }
+
+      grid.innerHTML = projects.map((p) => `
+        <div class="project-item">
+          <p class="project-item__title">${escHtml(p.title)}</p>
+          <p class="project-item__prompt">${escHtml(p.prompt)}</p>
+          <p class="project-item__date">${new Date(p.created_at).toLocaleDateString()}</p>
+        </div>
+      `).join('');
+    } catch (_) { /* non-critical */ }
+  }
+
+  function escHtml(s: string): string {
+    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+</script>

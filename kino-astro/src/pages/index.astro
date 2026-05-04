@@ -1,0 +1,152 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Kino" description="Describe a motion. Kino renders it.">
+  <section class="hero">
+    <div class="container">
+      <p class="hero__eyebrow">A MOTION DESIGN STUDIO</p>
+
+      <h1 class="hero__heading">
+        <span class="hero__line">Describe a motion.</span>
+        <span class="hero__line">Kino renders it.</span>
+      </h1>
+
+      <p class="hero__sub">
+        Built for the people who used to open After Effects.
+      </p>
+
+      <div class="prompt-block" id="hero-prompt">
+        <textarea
+          class="prompt-block__input"
+          id="prompt-input"
+          placeholder="Describe a motion…"
+          rows="3"
+        ></textarea>
+        <div class="prompt-block__footer">
+          <span class="prompt-block__hint">
+            Try: a logo that draws itself · text that rises up · a bar chart building
+          </span>
+          <button class="btn btn--primary" id="render-btn">Render →</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .hero {
+    min-height: calc(100vh - 56px);
+    display: flex;
+    align-items: center;
+    padding: 80px 0;
+  }
+
+  .hero__eyebrow {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    color: var(--text-dim);
+    margin-bottom: 32px;
+  }
+
+  .hero__heading {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-bottom: 24px;
+    overflow: hidden;
+  }
+
+  .hero__line {
+    display: block;
+    opacity: 0;
+    transform: translateY(110%);
+  }
+
+  .hero__sub {
+    font-size: 1.125rem;
+    color: var(--text-dim);
+    margin-bottom: 48px;
+    max-width: 480px;
+    opacity: 0;
+  }
+
+  .prompt-block {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+</style>
+
+<script>
+  import { isLoggedIn } from '../lib/api';
+
+  // Pattern A entrance: lines rise up, outExpo, 720ms, 60ms stagger
+  const lines = document.querySelectorAll<HTMLElement>('.hero__line');
+  const sub   = document.querySelector<HTMLElement>('.hero__sub');
+  const block = document.querySelector<HTMLElement>('.prompt-block');
+
+  function easeOutExpo(t: number): number {
+    return t === 1 ? 1 : 1 - Math.pow(2, -10 * t);
+  }
+
+  function animate(
+    el: HTMLElement,
+    from: { opacity: number; y: number },
+    to: { opacity: number; y: number },
+    duration: number,
+    delay: number
+  ) {
+    let start: number | null = null;
+    const tick = (now: number) => {
+      if (!start) start = now;
+      const elapsed = now - start - delay;
+      if (elapsed < 0) { requestAnimationFrame(tick); return; }
+      const t = Math.min(elapsed / duration, 1);
+      const e = easeOutExpo(t);
+      el.style.opacity = String(from.opacity + (to.opacity - from.opacity) * e);
+      el.style.transform = `translateY(${from.y + (to.y - from.y) * e}%)`;
+      if (t < 1) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  }
+
+  lines.forEach((line, i) => {
+    animate(line, { opacity: 0, y: 110 }, { opacity: 1, y: 0 }, 720, i * 60);
+  });
+  if (sub) {
+    setTimeout(() => {
+      sub.style.transition = 'opacity 600ms ease';
+      sub.style.opacity = '1';
+    }, lines.length * 60 + 400);
+  }
+  if (block) {
+    setTimeout(() => {
+      block.style.transition = 'opacity 600ms ease, transform 600ms ease';
+      block.style.opacity = '1';
+      block.style.transform = 'translateY(0)';
+    }, lines.length * 60 + 600);
+  }
+
+  // Render button
+  document.getElementById('render-btn')?.addEventListener('click', () => {
+    const prompt = (document.getElementById('prompt-input') as HTMLTextAreaElement)?.value.trim();
+    if (!prompt) return;
+
+    if (!isLoggedIn()) {
+      sessionStorage.setItem('kino_pending_prompt', prompt);
+      window.location.href = '/login';
+      return;
+    }
+
+    sessionStorage.setItem('kino_pending_prompt', prompt);
+    window.location.href = '/studio';
+  });
+
+  // Auto-fill from pending prompt on return
+  const pending = sessionStorage.getItem('kino_pending_prompt');
+  if (pending) {
+    const input = document.getElementById('prompt-input') as HTMLTextAreaElement;
+    if (input) input.value = pending;
+  }
+</script>

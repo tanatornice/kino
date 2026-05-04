@@ -1,0 +1,72 @@
+---
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = 'Kino',
+  description = 'Describe a motion. Kino renders it.',
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <title>{title === 'Kino' ? 'Kino' : `${title} — Kino`}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/src/styles/global.css" />
+    <link rel="stylesheet" href="/src/styles/nav.css" />
+    <link rel="stylesheet" href="/src/styles/button.css" />
+    <link rel="stylesheet" href="/src/styles/prompt.css" />
+    <link rel="stylesheet" href="/src/styles/card.css" />
+  </head>
+  <body>
+    <nav class="nav">
+      <div class="nav__inner">
+        <a href="/" class="nav__logo">Kino</a>
+        <div class="nav__links" id="nav-links">
+          <a href="/studio" class="nav__link">Studio</a>
+          <!-- Auth links injected by JS -->
+        </div>
+      </div>
+    </nav>
+
+    <main style="padding-top: 56px;">
+      <slot />
+    </main>
+
+    <script>
+      import { isLoggedIn, clearToken } from '../lib/api';
+
+      const nav = document.getElementById('nav-links');
+      if (nav) {
+        if (isLoggedIn()) {
+          const btn = document.createElement('button');
+          btn.textContent = 'Sign out';
+          btn.className = 'btn btn--ghost';
+          btn.style.fontSize = '0.875rem';
+          btn.style.padding = '6px 12px';
+          btn.addEventListener('click', () => {
+            clearToken();
+            window.location.href = '/login';
+          });
+          nav.appendChild(btn);
+        } else {
+          const a = document.createElement('a');
+          a.href = '/login';
+          a.className = 'nav__link';
+          a.textContent = 'Sign in';
+          nav.appendChild(a);
+        }
+      }
+    </script>
+  </body>
+</html>

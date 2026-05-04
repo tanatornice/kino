@@ -1,0 +1,170 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Sign in" description="Sign in to Kino.">
+  <section class="auth-section">
+    <div class="auth-card">
+      <div class="auth-tabs">
+        <button class="auth-tab auth-tab--active" id="tab-login">Sign in</button>
+        <button class="auth-tab" id="tab-signup">Create account</button>
+      </div>
+
+      <form id="auth-form" novalidate>
+        <div class="field">
+          <label class="field__label" for="email">Email</label>
+          <input
+            class="field__input"
+            type="email"
+            id="email"
+            name="email"
+            autocomplete="email"
+            required
+          />
+        </div>
+
+        <div class="field">
+          <label class="field__label" for="password">Password</label>
+          <input
+            class="field__input"
+            type="password"
+            id="password"
+            name="password"
+            autocomplete="current-password"
+            required
+          />
+        </div>
+
+        <p class="auth-error" id="auth-error" hidden></p>
+
+        <button class="btn btn--primary auth-submit" type="submit" id="submit-btn">
+          Sign in
+        </button>
+      </form>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .auth-section {
+    min-height: calc(100vh - 56px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 24px;
+  }
+
+  .auth-card {
+    width: 100%;
+    max-width: 400px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 32px;
+  }
+
+  .auth-tabs {
+    display: flex;
+    gap: 0;
+    margin-bottom: 32px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .auth-tab {
+    background: none;
+    border: none;
+    color: var(--text-dim);
+    font-family: var(--font);
+    font-size: 0.875rem;
+    font-weight: 500;
+    padding: 0 0 12px;
+    margin-right: 24px;
+    cursor: pointer;
+    border-bottom: 1px solid transparent;
+    margin-bottom: -1px;
+    transition: color 150ms, border-color 150ms;
+  }
+
+  .auth-tab--active {
+    color: var(--text);
+    border-bottom-color: var(--text);
+  }
+
+  .field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 20px; }
+
+  .field__label {
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--text-dim);
+  }
+
+  .field__input {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--text);
+    font-family: var(--font);
+    font-size: 0.9375rem;
+    padding: 10px 12px;
+    outline: none;
+    transition: border-color 150ms;
+  }
+
+  .field__input:focus { border-color: var(--muted); }
+
+  .auth-error {
+    font-size: 0.875rem;
+    color: #ef4444;
+    margin-bottom: 16px;
+  }
+
+  .auth-submit { width: 100%; justify-content: center; margin-top: 4px; }
+</style>
+
+<script>
+  import { api, saveToken } from '../lib/api';
+
+  let mode: 'login' | 'signup' = 'login';
+
+  const tabLogin  = document.getElementById('tab-login')!;
+  const tabSignup = document.getElementById('tab-signup')!;
+  const submitBtn = document.getElementById('submit-btn')!;
+  const errorEl   = document.getElementById('auth-error')!;
+
+  function setMode(m: 'login' | 'signup') {
+    mode = m;
+    tabLogin.classList.toggle('auth-tab--active', m === 'login');
+    tabSignup.classList.toggle('auth-tab--active', m === 'signup');
+    submitBtn.textContent = m === 'login' ? 'Sign in' : 'Create account';
+    errorEl.hidden = true;
+  }
+
+  tabLogin.addEventListener('click',  () => setMode('login'));
+  tabSignup.addEventListener('click', () => setMode('signup'));
+
+  document.getElementById('auth-form')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const email    = (document.getElementById('email')    as HTMLInputElement).value.trim();
+    const password = (document.getElementById('password') as HTMLInputElement).value;
+
+    errorEl.hidden = true;
+    submitBtn.setAttribute('disabled', '');
+    submitBtn.textContent = mode === 'login' ? 'Signing in…' : 'Creating account…';
+
+    try {
+      const res = mode === 'login'
+        ? await api.login(email, password)
+        : await api.signup(email, password);
+
+      saveToken(res.token);
+
+      const pending = sessionStorage.getItem('kino_pending_prompt');
+      window.location.href = pending ? '/studio' : '/studio';
+    } catch (err) {
+      errorEl.textContent = (err as Error).message;
+      errorEl.hidden = false;
+      submitBtn.removeAttribute('disabled');
+      submitBtn.textContent = mode === 'login' ? 'Sign in' : 'Create account';
+    }
+  });
+</script>
