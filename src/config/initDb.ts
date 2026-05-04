@@ -1,6 +1,6 @@
 import { pool } from './db';
 
-async function initDb(): Promise<void> {
+export async function initDb(): Promise<void> {
   const client = await pool.connect();
   try {
     await client.query(`
@@ -21,14 +21,18 @@ async function initDb(): Promise<void> {
 
       CREATE INDEX IF NOT EXISTS projects_user_id_idx ON projects(user_id);
     `);
-    console.log('Database tables ready.');
+    console.log('[db] Tables ready.');
   } finally {
     client.release();
-    await pool.end();
   }
 }
 
-initDb().catch((err) => {
-  console.error('Failed to initialize database:', err.message);
-  process.exit(1);
-});
+// CLI entry: `npm run db:init`
+if (require.main === module) {
+  initDb()
+    .then(() => pool.end())
+    .catch((err) => {
+      console.error('[db] Failed to initialize:', err.message);
+      process.exit(1);
+    });
+}

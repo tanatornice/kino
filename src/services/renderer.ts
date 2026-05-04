@@ -5,7 +5,8 @@ import { renderMedia, selectComposition } from '@remotion/renderer';
 import { TemplateParams } from './promptParser';
 
 const RENDERS_DIR = path.resolve(process.cwd(), 'renders');
-const ENTRY_POINT  = path.resolve(__dirname, '../remotion/index.ts');
+// Use the source .tsx file (not the compiled .js) — @remotion/bundler runs its own webpack
+const ENTRY_POINT  = path.resolve(process.cwd(), 'src/remotion/index.ts');
 
 // Bundle is compiled once and reused across all render jobs
 let cachedBundle: string | null = null;
