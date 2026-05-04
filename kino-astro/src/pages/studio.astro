@@ -278,7 +278,7 @@ import Layout from '../layouts/Layout.astro';
   }
 
   function showResult(outputUrl: string) {
-    const backendBase = (import.meta as any).env?.PUBLIC_API_URL ?? 'http://localhost:5000';
+    const backendBase = (import.meta as any).env?.PUBLIC_API_URL ?? 'https://kino-gn3q.onrender.com';
     const fullUrl = outputUrl.startsWith('http') ? outputUrl : `${backendBase}${outputUrl}`;
 
     const video  = document.getElementById('result-video') as HTMLVideoElement;

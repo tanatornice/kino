@@ -1,7 +1,7 @@
 const BASE_URL =
   import.meta.env.VITE_API_URL ??
   import.meta.env.PUBLIC_API_URL ??
-  'https://kino-1-etig.onrender.com';
+  'https://kino-gn3q.onrender.com';
 
 export interface ApiError {
   error: string;
