@@ -1,0 +1,97 @@
+/**
+ * Kino Design System — CSS Variables
+ * 
+ * Import this file in your main layout or global CSS:
+ * @import './tokens/variables.css';
+ * 
+ * All colors, fonts, and spacing are defined here.
+ * The design system derives everything from these tokens.
+ */
+
+:root {
+  /* === BASE COLORS === */
+  --paper: #F4F1EA;
+  --ink: #0A0A0A;
+
+  /* === ACCENT === */
+  --signal: #FF3B1F;
+
+  /* === FUNCTIONAL GRAYS (derived from ink) === */
+  --ink-80: #2A2A2A;
+  --ink-60: #5A5A5A;
+  --ink-40: #9A9A9A;
+  --ink-20: #D4D2CD;
+  --ink-10: #E8E5DE;
+
+  /* === STATUS === */
+  --ok: #1F8A4C;
+  --warn: #C77700;
+  --error: #C8261A;
+
+  /* === TYPOGRAPHY === */
+  /* Load these from next/font or your package manager */
+  --font-display: 'Söhne', 'Inter Display', -apple-system, system-ui, sans-serif;
+  --font-editorial: 'Söhne Mono', 'JetBrains Mono', ui-monospace, monospace;
+
+  /* === BASE UNIT === */
+  --unit: 8px;
+  --unit-half: 4px;
+
+  /* === SPACING SCALE === */
+  --space-1: 4px;
+  --space-1-5: 6px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-24: 96px;
+  --space-32: 128px;
+  --space-48: 192px;
+
+  /* === BORDER === */
+  --hairline: 1px solid var(--ink-20);
+  --border-radius: 2px;
+  --border-radius-lg: 4px;
+  --border-radius-pill: 999px;
+
+  /* === SHADOWS === */
+  --shadow-panel: 0 1px 0 var(--ink-20), 0 24px 48px -12px rgba(10, 10, 10, 0.12);
+
+  /* === TRANSITIONS === */
+  --duration-micro: 120ms;
+  --duration-short: 240ms;
+  --duration-medium: 400ms;
+  --duration-long: 720ms;
+  --duration-extended: 1200ms;
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.42, 0, 0.58, 1);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Dark mode (if you add it later) */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #0A0A0A;
+    --ink: #F4F1EA;
+    --ink-80: #D4D2CD;
+    --ink-60: #9A9A9A;
+    --ink-40: #5A5A5A;
+    --ink-20: #2A2A2A;
+    --ink-10: #1A1A1A;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-micro: 1ms;
+    --duration-short: 1ms;
+    --duration-medium: 1ms;
+    --duration-long: 1ms;
+    --duration-extended: 1ms;
+  }
+}

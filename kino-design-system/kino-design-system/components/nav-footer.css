@@ -1,0 +1,320 @@
+/**
+ * Navigation & Footer — Kino Design System
+ * 
+ * Reference: skills/components/SKILL.md §5
+ */
+
+/* === TOP NAVIGATION === */
+
+.navbar {
+  height: 64px;
+  background-color: var(--paper);
+  border-bottom: 1px solid var(--ink-20);
+  padding: 0 32px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  transition: border-color var(--duration-short) var(--ease-out);
+}
+
+.navbar.scrolled {
+  border-bottom-color: var(--ink);
+}
+
+.navbar__logo {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  text-decoration: none;
+  color: var(--ink);
+}
+
+.navbar__logo svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.navbar__center {
+  display: flex;
+  gap: 32px;
+  align-items: center;
+  flex: 1;
+  margin-left: 64px;
+}
+
+.navbar__nav {
+  display: flex;
+  gap: 24px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.navbar__nav-link {
+  font-family: var(--font-editorial);
+  font-size: 11px;
+  letter-spacing: 8%;
+  text-transform: uppercase;
+  color: var(--ink-80);
+  text-decoration: none;
+  transition: color var(--duration-short) var(--ease-out);
+}
+
+.navbar__nav-link:hover {
+  color: var(--ink);
+}
+
+.navbar__right {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.navbar__cta {
+  margin-left: auto;
+}
+
+/* === DARK MODE === */
+@media (prefers-color-scheme: dark) {
+  .navbar {
+    background-color: var(--ink-10);
+    border-bottom-color: var(--ink-20);
+  }
+
+  .navbar.scrolled {
+    border-bottom-color: var(--paper);
+  }
+
+  .navbar__logo {
+    color: var(--paper);
+  }
+
+  .navbar__nav-link {
+    color: var(--ink-40);
+  }
+
+  .navbar__nav-link:hover {
+    color: var(--paper);
+  }
+}
+
+/* === MOBILE NAV === */
+
+@media (max-width: 768px) {
+  .navbar__center {
+    display: none;
+  }
+
+  .navbar {
+    padding: 0 16px;
+  }
+}
+
+/* === FOOTER === */
+
+.footer {
+  background-color: var(--ink);
+  color: var(--paper);
+  padding: 96px 32px 48px;
+}
+
+.footer__grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+  gap: 64px;
+  max-width: 1280px;
+  margin: 0 auto 48px;
+  border-bottom: 1px solid var(--ink-80);
+  padding-bottom: 48px;
+}
+
+.footer__col {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.footer__logo {
+  display: inline-block;
+  width: 100%;
+  max-width: 120px;
+  margin-bottom: 16px;
+}
+
+.footer__logo svg {
+  width: 100%;
+  display: block;
+}
+
+.footer__tagline {
+  font-family: var(--font-display);
+  font-size: 14px;
+  line-height: 1.5;
+  color: rgba(244, 241, 234, 0.6);
+  margin: 0;
+}
+
+.footer__timecode {
+  font-family: var(--font-editorial);
+  font-size: 9px;
+  letter-spacing: 8%;
+  text-transform: uppercase;
+  color: var(--ink-40);
+  margin-top: 24px;
+}
+
+.footer__heading {
+  font-family: var(--font-editorial);
+  font-size: 9px;
+  letter-spacing: 8%;
+  text-transform: uppercase;
+  color: rgba(244, 241, 234, 0.4);
+  margin: 0 0 16px 0;
+}
+
+.footer__links {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.footer__link {
+  font-family: var(--font-display);
+  font-size: 14px;
+  color: var(--paper);
+  text-decoration: none;
+  transition: color var(--duration-short) var(--ease-out);
+}
+
+.footer__link:hover {
+  color: var(--signal);
+}
+
+.footer__bottom {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 32px;
+}
+
+.footer__meta {
+  font-family: var(--font-editorial);
+  font-size: 9px;
+  letter-spacing: 8%;
+  text-transform: uppercase;
+  color: var(--ink-40);
+}
+
+.footer__socials {
+  display: flex;
+  gap: 16px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.footer__social-link {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  color: var(--paper);
+  text-decoration: none;
+  transition: color var(--duration-short) var(--ease-out);
+}
+
+.footer__social-link:hover {
+  color: var(--signal);
+}
+
+/* === MOBILE FOOTER === */
+
+@media (max-width: 768px) {
+  .footer {
+    padding: 64px 16px 32px;
+  }
+
+  .footer__grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+    margin-bottom: 32px;
+    padding-bottom: 32px;
+  }
+
+  .footer__bottom {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+/* === HTML EXAMPLES === */
+
+/*
+NAVBAR:
+
+<nav class="navbar">
+  <a href="/" class="navbar__logo">
+    <svg viewBox="0 0 24 24"><!-- Kino wordmark --></svg>
+  </a>
+  
+  <div class="navbar__center">
+    <ul class="navbar__nav">
+      <li><a href="/templates" class="navbar__nav-link">Templates</a></li>
+      <li><a href="/studio" class="navbar__nav-link">Studio</a></li>
+      <li><a href="/blog" class="navbar__nav-link">Blog</a></li>
+    </ul>
+  </div>
+  
+  <div class="navbar__right">
+    <a href="/login" class="button button--ghost button--sm">Log in</a>
+    <a href="/signup" class="button button--primary button--sm navbar__cta">Start</a>
+  </div>
+</nav>
+
+FOOTER:
+
+<footer class="footer">
+  <div class="footer__grid">
+    <div class="footer__col">
+      <div class="footer__logo">
+        <svg viewBox="0 0 24 24"><!-- Kino wordmark --></svg>
+      </div>
+      <p class="footer__tagline">
+        A motion design studio you prompt. Render in seconds.
+      </p>
+      <div class="footer__timecode" data-timecode="00:00:24:15">
+        00:00:24:15
+      </div>
+    </div>
+    
+    <div class="footer__col">
+      <h3 class="footer__heading">Product</h3>
+      <ul class="footer__links">
+        <li><a href="/templates" class="footer__link">Templates</a></li>
+        <li><a href="/projects" class="footer__link">Projects</a></li>
+        <li><a href="/studio" class="footer__link">Learn</a></li>
+      </ul>
+    </div>
+    
+    <!-- More columns... -->
+  </div>
+  
+  <div class="footer__bottom">
+    <div class="footer__meta">
+      © 2026 Kino · v1.0.0 · <a href="/changelog" class="footer__link">Changelog</a>
+    </div>
+    <ul class="footer__socials">
+      <li><a href="https://x.com/kino" class="footer__social-link">𝕏</a></li>
+      <li><a href="https://instagram.com/kinostudio" class="footer__social-link">●</a></li>
+    </ul>
+  </div>
+</footer>
+*/

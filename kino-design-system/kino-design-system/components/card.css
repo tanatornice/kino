@@ -1,0 +1,200 @@
+/**
+ * Card Component — Kino Design System
+ * 
+ * Two patterns: editorial (feature highlights) and template gallery cards.
+ * 
+ * Reference: skills/components/SKILL.md §4
+ */
+
+/* === EDITORIAL CARD === */
+
+.card {
+  background-color: var(--paper);
+  border: 1px solid var(--ink-20);
+  border-radius: var(--border-radius-lg);
+  padding: 32px;
+}
+
+.card__eyebrow {
+  font-family: var(--font-editorial);
+  font-size: 11px;
+  letter-spacing: 8%;
+  text-transform: uppercase;
+  color: var(--ink-60);
+  margin-bottom: 16px;
+  display: block;
+}
+
+.card__heading {
+  font-family: var(--font-display);
+  font-size: 24px;
+  line-height: 1.2;
+  letter-spacing: -1%;
+  font-weight: 500;
+  color: var(--ink);
+  margin: 0 0 16px 0;
+}
+
+.card__body {
+  font-family: var(--font-display);
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--ink-80);
+  margin: 0 0 24px 0;
+}
+
+.card__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink);
+  text-decoration: none;
+  transition: transform var(--duration-short) var(--ease-out);
+}
+
+.card__link:hover {
+  transform: translateX(4px);
+}
+
+.card__link-arrow {
+  display: inline-block;
+}
+
+/* === TEMPLATE CARD === */
+
+.template-card {
+  aspect-ratio: 16 / 10;
+  background-color: var(--ink-10);
+  border: 1px solid var(--ink-20);
+  border-radius: var(--border-radius-lg);
+  overflow: hidden;
+  position: relative;
+  cursor: pointer;
+  transition: border-color var(--duration-short) var(--ease-out);
+}
+
+.template-card:hover {
+  border-color: var(--ink);
+}
+
+.template-card__thumbnail {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.template-card__meta {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(10, 10, 10, 0.92);
+  color: var(--paper);
+  padding: 12px 16px;
+  transform: translateY(100%);
+  transition: transform var(--duration-medium) var(--ease-out);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.template-card:hover .template-card__meta {
+  transform: translateY(0);
+}
+
+.template-card__title {
+  font-family: var(--font-display);
+  font-size: 14px;
+  line-height: 1.5;
+  font-weight: 500;
+  color: var(--paper);
+  margin: 0;
+}
+
+.template-card__timecode {
+  font-family: var(--font-editorial);
+  font-size: 11px;
+  letter-spacing: 8%;
+  text-transform: uppercase;
+  color: var(--paper);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.template-card__frame-count {
+  font-family: var(--font-editorial);
+  font-size: 9px;
+  letter-spacing: 8%;
+  text-transform: uppercase;
+  color: rgba(244, 241, 234, 0.6);
+  margin-left: 8px;
+}
+
+/* === DARK MODE === */
+@media (prefers-color-scheme: dark) {
+  .card {
+    background-color: var(--ink-10);
+    border-color: var(--ink-20);
+  }
+
+  .card__heading {
+    color: var(--paper);
+  }
+
+  .card__body {
+    color: var(--ink-40);
+  }
+
+  .card__link {
+    color: var(--paper);
+  }
+
+  .template-card {
+    background-color: var(--ink-20);
+    border-color: var(--ink-20);
+  }
+
+  .template-card:hover {
+    border-color: var(--paper);
+  }
+
+  .template-card__meta {
+    background-color: rgba(244, 241, 234, 0.08);
+  }
+}
+
+/* === HTML EXAMPLES === */
+
+/*
+EDITORIAL CARD:
+
+<div class="card">
+  <span class="card__eyebrow">AI Motion Designer</span>
+  <h3 class="card__heading">Animate text in seconds</h3>
+  <p class="card__body">
+    Type a description. Kino renders kinetic typography that respects 
+    the read, with proper easing and weight.
+  </p>
+  <a href="/studio" class="card__link">
+    Learn more
+    <span class="card__link-arrow">→</span>
+  </a>
+</div>
+
+TEMPLATE CARD:
+
+<div class="template-card">
+  <img src="thumbnail.jpg" alt="Template preview" class="template-card__thumbnail">
+  <div class="template-card__meta">
+    <div>
+      <h4 class="template-card__title">Logo that draws itself</h4>
+      <span class="template-card__frame-count">240 frames</span>
+    </div>
+    <span class="template-card__timecode">00:00:08:00</span>
+  </div>
+</div>
+*/

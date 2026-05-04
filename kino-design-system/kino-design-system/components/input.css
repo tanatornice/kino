@@ -1,0 +1,256 @@
+/**
+ * Input Component — Kino Design System
+ * 
+ * All text inputs share one baseline style, with a special case for the
+ * homepage prompt input.
+ * 
+ * Reference: skills/components/SKILL.md §3 and §8
+ */
+
+/* === BASE INPUT === */
+
+.input {
+  display: block;
+  width: 100%;
+  height: 40px;
+  padding: 0 14px;
+  background-color: var(--paper);
+  border: 1px solid var(--ink-20);
+  border-radius: var(--border-radius);
+  font-family: var(--font-display);
+  font-size: 16px;
+  line-height: 1.55;
+  color: var(--ink);
+  transition: border-color var(--duration-short) var(--ease-out);
+}
+
+.input::placeholder {
+  color: var(--ink-40);
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--ink);
+}
+
+.input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* === SIZES === */
+
+.input--sm {
+  height: 32px;
+  padding: 0 12px;
+  font-size: 14px;
+}
+
+.input--lg {
+  height: 56px;
+  padding: 0 16px;
+  font-size: 16px;
+}
+
+/* === DARK MODE === */
+@media (prefers-color-scheme: dark) {
+  .input {
+    background-color: var(--ink-10);
+    border-color: var(--ink-20);
+    color: var(--paper);
+  }
+
+  .input::placeholder {
+    color: var(--ink-40);
+  }
+
+  .input:focus {
+    border-color: var(--paper);
+  }
+}
+
+/* === PROMPT BLOCK (Homepage signature component) === */
+
+.prompt-block {
+  max-width: 100%;
+}
+
+.prompt-frame {
+  border: 2px solid var(--ink);
+  border-radius: var(--border-radius-lg);
+  background-color: var(--paper);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.prompt-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--ink-20);
+  font-family: var(--font-editorial);
+  font-size: 11px;
+  letter-spacing: 8%;
+  text-transform: uppercase;
+  color: var(--ink-80);
+}
+
+.prompt-timecode {
+  font-family: var(--font-editorial);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0;
+}
+
+.prompt-input {
+  flex: 1;
+  min-height: 120px;
+  padding: 16px;
+  border: none;
+  font-family: var(--font-display);
+  font-size: 16px;
+  line-height: 1.55;
+  color: var(--ink);
+  background-color: transparent;
+  resize: none;
+}
+
+.prompt-input:focus {
+  outline: none;
+}
+
+.prompt-input::placeholder {
+  color: var(--ink-40);
+}
+
+.prompt-controls {
+  display: flex;
+  gap: 12px;
+  padding: 12px 16px;
+  border-top: 1px solid var(--ink-20);
+  align-items: center;
+  justify-content: space-between;
+}
+
+.prompt-modes {
+  display: flex;
+  gap: 8px;
+}
+
+.prompt-pill {
+  height: 24px;
+  padding: 0 12px;
+  border: 1px solid var(--ink-20);
+  border-radius: var(--border-radius-pill);
+  background-color: transparent;
+  font-family: var(--font-editorial);
+  font-size: 9px;
+  letter-spacing: 10%;
+  text-transform: uppercase;
+  color: var(--ink-60);
+  cursor: pointer;
+  transition: all var(--duration-short) var(--ease-out);
+  white-space: nowrap;
+}
+
+.prompt-pill:hover {
+  border-color: var(--ink);
+}
+
+.prompt-pill.active {
+  background-color: var(--ink);
+  color: var(--paper);
+  border-color: var(--ink);
+}
+
+.prompt-submit {
+  flex-shrink: 0;
+}
+
+.prompt-suggestions {
+  margin-top: 12px;
+  font-family: var(--font-editorial);
+  font-size: 11px;
+  letter-spacing: 8%;
+  text-transform: uppercase;
+  color: var(--ink-60);
+  text-align: center;
+}
+
+.prompt-suggestions strong {
+  color: var(--ink);
+}
+
+/* === DARK MODE === */
+@media (prefers-color-scheme: dark) {
+  .prompt-frame {
+    background-color: var(--ink-10);
+    border-color: var(--paper);
+  }
+
+  .prompt-meta {
+    border-bottom-color: var(--ink-20);
+    color: var(--ink-60);
+  }
+
+  .prompt-input {
+    color: var(--paper);
+  }
+
+  .prompt-input::placeholder {
+    color: var(--ink-40);
+  }
+
+  .prompt-controls {
+    border-top-color: var(--ink-20);
+  }
+
+  .prompt-pill {
+    border-color: var(--ink-20);
+    color: var(--ink-40);
+  }
+
+  .prompt-pill:hover {
+    border-color: var(--paper);
+  }
+
+  .prompt-pill.active {
+    background-color: var(--paper);
+    color: var(--ink);
+  }
+}
+
+/* === HTML STRUCTURE EXAMPLE === */
+
+/*
+<div class="prompt-block">
+  <div class="prompt-frame">
+    <div class="prompt-meta">
+      <span>KINO</span>
+      <span class="prompt-timecode" data-timecode="00:00:24:15">00:00:24:15</span>
+    </div>
+    
+    <textarea class="prompt-input" 
+              placeholder="Describe a motion..."></textarea>
+    
+    <div class="prompt-controls">
+      <div class="prompt-modes">
+        <button class="prompt-pill active">Animate</button>
+        <button class="prompt-pill">Type</button>
+        <button class="prompt-pill">Logo</button>
+      </div>
+      <button class="button button--primary button--lg">
+        Render →
+      </button>
+    </div>
+  </div>
+  
+  <div class="prompt-suggestions">
+    Try: <strong>a logo that draws itself</strong> · 
+    <strong>particle text revealing 'KINO'</strong> · 
+    <strong>a clean countdown from 5</strong>
+  </div>
+</div>
+*/

@@ -1,0 +1,194 @@
+/**
+ * Button Component — Kino Design System
+ * 
+ * Three variants (primary, secondary, ghost) × three sizes (sm, md, lg)
+ * This is a template; adapt to your framework (React, Vue, Svelte, etc.)
+ * 
+ * Reference: skills/components/SKILL.md §1
+ */
+
+/* === BASE BUTTON STYLES === */
+
+.button {
+  display: inline-block;
+  font-family: var(--font-display);
+  font-weight: 500;
+  border-radius: var(--border-radius);
+  text-decoration: none;
+  cursor: pointer;
+  transition: all var(--duration-short) var(--ease-out);
+  border: 1px solid transparent;
+  white-space: nowrap;
+  user-select: none;
+}
+
+.button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* === SIZES === */
+
+.button--sm {
+  height: 32px;
+  padding: 0 12px;
+  font-size: 11px;
+  letter-spacing: 8%;
+  font-family: var(--font-editorial);
+  text-transform: uppercase;
+}
+
+.button--md {
+  height: 40px;
+  padding: 0 16px;
+  font-size: 14px;
+  letter-spacing: 0;
+}
+
+.button--lg {
+  height: 48px;
+  padding: 0 24px;
+  font-size: 16px;
+  letter-spacing: 0;
+}
+
+/* === VARIANTS === */
+
+/* PRIMARY — the single most important action */
+.button--primary {
+  background-color: var(--ink);
+  color: var(--paper);
+  border-color: var(--ink);
+}
+
+.button--primary:hover:not(:disabled) {
+  background-color: var(--ink-80);
+  border-color: var(--ink-80);
+}
+
+.button--primary:active {
+  background-color: var(--ink-60);
+}
+
+/* SECONDARY — default for most actions */
+.button--secondary {
+  background-color: transparent;
+  color: var(--ink);
+  border-color: var(--ink-20);
+}
+
+.button--secondary:hover:not(:disabled) {
+  background-color: var(--ink-10);
+  border-color: var(--ink);
+}
+
+.button--secondary:active {
+  background-color: var(--ink-20);
+}
+
+/* GHOST — tertiary, minimal */
+.button--ghost {
+  background-color: transparent;
+  color: var(--ink);
+  border-color: transparent;
+}
+
+.button--ghost:hover:not(:disabled) {
+  background-color: var(--ink-10);
+}
+
+.button--ghost:active {
+  background-color: var(--ink-20);
+}
+
+/* === DARK MODE === */
+@media (prefers-color-scheme: dark) {
+  .button--primary {
+    background-color: var(--paper);
+    color: var(--ink);
+    border-color: var(--paper);
+  }
+
+  .button--primary:hover:not(:disabled) {
+    background-color: var(--ink-10);
+    border-color: var(--ink-10);
+  }
+
+  .button--secondary {
+    border-color: var(--ink-20);
+  }
+
+  .button--secondary:hover:not(:disabled) {
+    background-color: var(--ink-20);
+    border-color: var(--ink-10);
+  }
+
+  .button--ghost:hover:not(:disabled) {
+    background-color: var(--ink-20);
+  }
+}
+
+/* === UTILITIES === */
+
+.button--full-width {
+  width: 100%;
+}
+
+.button--loading {
+  position: relative;
+  pointer-events: none;
+  color: transparent;
+}
+
+.button--loading::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 4px;
+  height: 4px;
+  margin: -2px 0 0 -2px;
+  border-radius: 50%;
+  background-color: currentColor;
+  box-shadow: 8px 0 0 -4px, -8px 0 0 -4px;
+  animation: button-loading var(--duration-short) infinite alternate;
+}
+
+@keyframes button-loading {
+  from {
+    opacity: 0.4;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* === HTML EXAMPLES === */
+
+/*
+Primary md:
+  <button class="button button--primary button--md">Render →</button>
+
+Secondary lg, full-width:
+  <button class="button button--secondary button--lg button--full-width">
+    Save a copy
+  </button>
+
+Ghost sm:
+  <button class="button button--ghost button--sm">View more</button>
+
+Loading state:
+  <button class="button button--primary button--md button--loading" disabled>
+    Rendering
+  </button>
+
+Inverted (dark bg, light text) — use in footer:
+  <button class="button button--primary button--md" style="
+    background-color: var(--paper);
+    color: var(--ink);
+    border-color: var(--paper);
+  ">
+    Render now →
+  </button>
+*/

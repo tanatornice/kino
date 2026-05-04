@@ -1,0 +1,53 @@
+<svg viewBox="0 0 240 48" xmlns="http://www.w3.org/2000/svg" class="kino-logo">
+  <!--
+    Kino Logo — Wordmark with Animatable Dot
+    
+    The dot (circle id="logo-dot") is the only element that should animate
+    in the brand identity. Possible animations:
+    
+    1. Pulse (homepage hero):
+       animate('#logo-dot', {
+         scale: [1, 1.15, 1],
+         duration: 1600,
+         loop: true,
+         ease: 'inOutSine',
+       });
+    
+    2. Trace (loading state):
+       animate(createDrawable('#logo-dot-path'), {
+         draw: ['0 0', '0 1'],
+         duration: 400,
+         ease: 'out(3)',
+       });
+    
+    Reference: skills/brand/SKILL.md Logo section
+  -->
+  
+  <defs>
+    <style>
+      .logo-text {
+        font-family: var(--font-display);
+        font-size: 40px;
+        font-weight: 500;
+        fill: var(--ink);
+      }
+    </style>
+  </defs>
+  
+  <!-- The wordmark -->
+  <text class="logo-text" x="0" y="36">Kino</text>
+  
+  <!-- The animatable dot -->
+  <!-- Positioned over the 'i' -->
+  <circle id="logo-dot" cx="113" cy="6" r="4" fill="var(--signal)"/>
+  
+  <!-- Alternative: Trace path for the dot (for draw animation) -->
+  <g style="opacity: 0; pointer-events: none;">
+    <path id="logo-dot-path" 
+          d="M 113 2 L 113 10" 
+          stroke="var(--signal)" 
+          stroke-width="8" 
+          stroke-linecap="round"
+          fill="none"/>
+  </g>
+</svg>

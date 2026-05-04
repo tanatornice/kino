@@ -1,0 +1,44 @@
+<svg viewBox="0 0 1200 600" xmlns="http://www.w3.org/2000/svg" class="kino-morph-diagram">
+  <!--
+    Kino SVG Morphing Shape Template
+    
+    This file contains SVG paths set up for anime.js morphTo() animations.
+    Each shape must have the same number of points for clean morphing.
+    
+    Usage in anime.js (from animation/SKILL.md Pattern D):
+    
+    animate('.morph', {
+      d: morphTo('.shape-b'),
+      duration: 1400,
+      ease: 'inOutQuad',
+    });
+    
+    Reference: skills/animation/SKILL.md Pattern D
+  -->
+  
+  <!-- Shape A: Kino wordmark-like glyph -->
+  <path class="shape-a" d="M 300 200 L 500 200 L 500 400 L 300 400 Z" 
+        fill="none" stroke="var(--signal)" stroke-width="2" stroke-linejoin="round"/>
+  
+  <!-- Shape B: Circular form -->
+  <path class="shape-b" d="M 400 150 Q 550 150 550 300 Q 550 450 400 450 Q 250 450 250 300 Q 250 150 400 150 Z"
+        fill="none" stroke="var(--signal)" stroke-width="2" stroke-linejoin="round"
+        style="display: none"/>
+  
+  <!-- Shape C: Angular triangle-ish -->
+  <path class="shape-c" d="M 400 150 L 550 400 L 250 400 Z"
+        fill="none" stroke="var(--signal)" stroke-width="2" stroke-linejoin="round"
+        style="display: none"/>
+  
+  <!-- The animated morph target -->
+  <path class="morph" d="M 300 200 L 500 200 L 500 400 L 300 400 Z"
+        fill="none" stroke="var(--signal)" stroke-width="2" stroke-linejoin="round"/>
+  
+  <!-- Grid background (optional) -->
+  <defs>
+    <pattern id="grid" width="50" height="50" patternUnits="userSpaceOnUse">
+      <path d="M 50 0 L 0 0 0 50" fill="none" stroke="var(--ink-10)" stroke-width="0.5"/>
+    </pattern>
+  </defs>
+  <rect width="1200" height="600" fill="url(#grid)" opacity="0.5"/>
+</svg>

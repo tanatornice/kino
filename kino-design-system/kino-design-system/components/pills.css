@@ -1,0 +1,182 @@
+/**
+ * Pills and Tags — Kino Design System
+ * 
+ * Inline interactive elements for filtering and labeling.
+ * 
+ * Reference: skills/components/SKILL.md §2 and §7
+ */
+
+/* === FILTER PILL === */
+
+.pill {
+  display: inline-block;
+  height: 32px;
+  padding: 0 14px;
+  border-radius: var(--border-radius-pill);
+  border: 1px solid var(--ink-20);
+  background-color: transparent;
+  font-family: var(--font-editorial);
+  font-size: 11px;
+  letter-spacing: 8%;
+  text-transform: uppercase;
+  color: var(--ink-60);
+  cursor: pointer;
+  transition: all var(--duration-short) var(--ease-out);
+  white-space: nowrap;
+  user-select: none;
+}
+
+.pill:hover {
+  border-color: var(--ink);
+  color: var(--ink);
+}
+
+.pill.active {
+  background-color: var(--ink);
+  color: var(--paper);
+  border-color: var(--ink);
+}
+
+.pill:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* === PILL ROW (container for horizontal pill groups) === */
+
+.pill-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.pill-row--sticky {
+  position: sticky;
+  top: 0;
+  background-color: var(--paper);
+  padding: 16px 0;
+  z-index: 10;
+  border-bottom: 1px solid var(--ink-20);
+}
+
+/* === TAG === */
+
+.tag {
+  display: inline-block;
+  height: 22px;
+  padding: 0 8px;
+  border: 1px solid var(--ink-20);
+  border-radius: var(--border-radius);
+  font-family: var(--font-editorial);
+  font-size: 9px;
+  letter-spacing: 10%;
+  text-transform: uppercase;
+  color: var(--ink-60);
+  white-space: nowrap;
+}
+
+.tag.clickable {
+  cursor: pointer;
+  transition: all var(--duration-short) var(--ease-out);
+}
+
+.tag.clickable:hover {
+  border-color: var(--ink);
+  color: var(--ink);
+  background-color: var(--ink-10);
+}
+
+.tag__list {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+/* === DARK MODE === */
+@media (prefers-color-scheme: dark) {
+  .pill {
+    border-color: var(--ink-20);
+    color: var(--ink-40);
+  }
+
+  .pill:hover {
+    border-color: var(--paper);
+    color: var(--paper);
+  }
+
+  .pill.active {
+    background-color: var(--paper);
+    color: var(--ink);
+    border-color: var(--paper);
+  }
+
+  .pill-row--sticky {
+    background-color: var(--ink-10);
+    border-bottom-color: var(--ink-20);
+  }
+
+  .tag {
+    border-color: var(--ink-20);
+    color: var(--ink-40);
+  }
+
+  .tag.clickable:hover {
+    border-color: var(--paper);
+    color: var(--paper);
+    background-color: var(--ink-20);
+  }
+}
+
+/* === ANIMATIONS (with anime.js) === */
+
+/*
+When a pill becomes active, a 1px signal underline briefly draws.
+In animation/SKILL.md, this is created with:
+
+animate(pill, {
+  backgroundColor: 'var(--ink)',
+  borderColor: 'var(--ink)',
+  color: 'var(--paper)',
+  duration: 160,
+  ease: 'out(3)',
+});
+
+// Decorative underline draw
+animate(createDrawable(pill.querySelector('.underline')), {
+  draw: ['0 0', '0 1'],
+  duration: 200,
+  ease: 'out(3)',
+  offset: '-100ms',
+}, 0);
+*/
+
+/* === HTML EXAMPLES === */
+
+/*
+FILTER ROW (sticky):
+
+<div class="pill-row pill-row--sticky">
+  <button class="pill active">All</button>
+  <button class="pill">Text</button>
+  <button class="pill">Logo</button>
+  <button class="pill">Social</button>
+  <button class="pill">Charts</button>
+</div>
+
+TAG LIST (on a template card or blog post):
+
+<div class="tag__list">
+  <span class="tag">Text Animation</span>
+  <span class="tag">Social Media</span>
+  <a href="/templates/text" class="tag clickable">Motion Design</a>
+</div>
+
+PROMPT MODES (inside prompt block):
+
+<div class="pill-row">
+  <button class="pill active">Animate</button>
+  <button class="pill">Type</button>
+  <button class="pill">Logo</button>
+</div>
+*/

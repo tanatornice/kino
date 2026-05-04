@@ -1,0 +1,79 @@
+<svg viewBox="0 0 800 300" xmlns="http://www.w3.org/2000/svg" class="kino-diagram">
+  <!--
+    Kino SVG Line Drawing Template
+    
+    For use with anime.js createDrawable() and the draw animation.
+    
+    Pattern from animation/SKILL.md Pattern C:
+    
+    animate(createDrawable('.diagram-path'), {
+      draw: ['0 0', '0 1'],
+      duration: 1200,
+      ease: 'inOut(3)',
+      delay: stagger(80),
+    });
+    
+    Each <path> represents a separate drawable element that can be animated.
+  -->
+  
+  <defs>
+    <style>
+      .diagram-path {
+        stroke: var(--ink);
+        stroke-width: 1.5;
+        fill: none;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      
+      .diagram-accent {
+        stroke: var(--signal);
+        stroke-width: 2;
+        fill: none;
+      }
+      
+      .diagram-label {
+        font-family: var(--font-editorial);
+        font-size: 12px;
+        letter-spacing: 8%;
+        text-transform: uppercase;
+        fill: var(--ink);
+      }
+    </style>
+  </defs>
+  
+  <!-- Example: Three-column workflow diagram -->
+  
+  <!-- Column 1: Input -->
+  <circle class="diagram-path" cx="100" cy="150" r="40"/>
+  <text class="diagram-label" x="100" y="210" text-anchor="middle">Brief</text>
+  
+  <!-- Arrow 1 -->
+  <path class="diagram-accent" d="M 150 150 L 200 150"/>
+  <polygon class="diagram-accent" points="200,150 195,145 195,155" fill="var(--signal)"/>
+  
+  <!-- Column 2: Process -->
+  <rect class="diagram-path" x="220" y="110" width="80" height="80" rx="4"/>
+  <text class="diagram-label" x="260" y="145" text-anchor="middle">Render</text>
+  
+  <!-- Arrow 2 -->
+  <path class="diagram-accent" d="M 310 150 L 360 150"/>
+  <polygon class="diagram-accent" points="360,150 355,145 355,155" fill="var(--signal)"/>
+  
+  <!-- Column 3: Output -->
+  <polygon class="diagram-path" points="420,110 460,150 420,190 380,150"/>
+  <text class="diagram-label" x="420" y="210" text-anchor="middle">MP4</text>
+  
+  <!-- Optional: Alternative diagram (e.g., comparison) -->
+  <!-- Uncomment to use as a second version -->
+  
+  <!--
+  <g style="transform: translateY(0px)">
+    <path class="diagram-path" d="M 50 300 L 150 300 L 150 350 L 50 350 Z"/>
+    <text class="diagram-label" x="100" y="330" text-anchor="middle">After Effects</text>
+    
+    <path class="diagram-path" d="M 450 300 L 550 300 L 550 350 L 450 350 Z"/>
+    <text class="diagram-label" x="500" y="330" text-anchor="middle">Kino</text>
+  </g>
+  -->
+</svg>
