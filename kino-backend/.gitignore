@@ -1,0 +1,10 @@
+node_modules/
+dist/
+.env
+*.js.map
+
+# Rendered output files — keep the directory, ignore the files
+renders/*.mp4
+renders/*.mov
+renders/*.gif
+renders/*.webm
